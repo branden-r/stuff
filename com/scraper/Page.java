@@ -13,8 +13,6 @@ import static com.scraper.Misc.indexOfUnquoted;
 public final class Page {
     private final String text;
     private final String protocol;
-    private final String openTemplate = "<%s";
-    private final String close = ">";
 
     public Page(final String url) {
         protocol = url.substring(0, url.indexOf("//"));
@@ -33,15 +31,18 @@ public final class Page {
         return url.substring(url.lastIndexOf('/') + 1);
     }
 
+    private static final String tagOpen = "<%s";
+    private static final String tagClose = ">";
+
     public void downloadImgs(final String dir, final String tag, final String imgAttr, final String... desiredAttrs) {
         new File(dir).mkdirs();
-        final String open = openTemplate.formatted(tag);
+        final String open = tagOpen.formatted(tag);
 
         int start;
         int search = 0;
         while ((start = indexOfUnquoted(text, open, search)) != -1) {
-            final int stop = indexOfUnquoted(text, close, start + open.length());
-            search = stop + close.length();
+            final int stop = indexOfUnquoted(text, tagClose, start + open.length());
+            search = stop + tagClose.length();
             final Tag t = new Tag(text.substring(start, search));
             if (t.has(desiredAttrs)) downloadImg(dir, t.get(imgAttr));
         }
