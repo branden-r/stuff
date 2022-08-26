@@ -11,8 +11,7 @@ public final class Misc {
             if (c != query.charAt(m)) {
                 m = 0;
                 if (c == '"') quoted = !quoted;
-            }
-            else if (!quoted) {
+            } else if (!quoted) {
                 m++;
                 if (m == query.length()) return i + 1 - query.length();
             }

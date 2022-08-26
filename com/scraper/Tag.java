@@ -1,31 +1,28 @@
 package com.scraper;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Tag {
+    private static final Pattern typePtrn = Pattern.compile("<(.+?) ");
+    private static final String keyPtrnStr = "([^ =]+)";
+    private static final String valPtrnStr = "([^\"]+)";
+    private static final Pattern htmlAttrPtrn = Pattern.compile(" %s=\"%s\"".formatted(keyPtrnStr, valPtrnStr));
+    private static final Pattern givenAttrPtrn = Pattern.compile("%s=%s".formatted(keyPtrnStr, valPtrnStr));
     private final String type;
     private final Map<String, String> attrs;
-
     public Tag(final String text) {
         this.type = parseType(text);
         this.attrs = parseAttrs(text);
     }
-
-    private static final Pattern typePtrn = Pattern.compile("<(.+?) ");
 
     private String parseType(final String text) {
         final Matcher m = typePtrn.matcher(text);
         m.find();
         return m.group(1);
     }
-
-    private static final String keyPtrnStr = "([^ =]+)";
-    private static final String valPtrnStr = "([^\"]+)";
-    private static final Pattern htmlAttrPtrn = Pattern.compile(" %s=\"%s\"".formatted(keyPtrnStr, valPtrnStr));
-    private static final Pattern givenAttrPtrn = Pattern.compile("%s=%s".formatted(keyPtrnStr, valPtrnStr));
 
     private Map<String, String> parseAttrs(final String text) {
         final Map<String, String> attrs = new HashMap<>();

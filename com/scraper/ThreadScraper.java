@@ -7,7 +7,7 @@ public final class ThreadScraper {
 
     public static void main(final String[] args) {
         new Page(ask("url?"))
-                .downloadImgs(ask("dir?"),"a", "href", "class=fileThumb");
+                .downloadImgs(ask("dir?"), "a", "href", "class=fileThumb");
     }
 
     private static String ask(final String msg) {

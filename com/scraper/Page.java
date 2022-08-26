@@ -13,6 +13,8 @@ import static com.scraper.Misc.indexOfUnquoted;
 public final class Page {
     private final String text;
     private final String protocol;
+    private final String openTemplate = "<%s";
+    private final String close = ">";
 
     public Page(final String url) {
         protocol = url.substring(0, url.indexOf("//"));
@@ -27,8 +29,9 @@ public final class Page {
         }
     }
 
-    private final String openTemplate = "<%s";
-    private final String close = ">";
+    private static String getFilename(final String url) {
+        return url.substring(url.lastIndexOf('/') + 1);
+    }
 
     public void downloadImgs(final String dir, final String tag, final String imgAttr, final String... desiredAttrs) {
         new File(dir).mkdirs();
@@ -56,9 +59,5 @@ public final class Page {
     private String inferProtocol(final String url) {
         if (url.startsWith("//")) return protocol + url;
         return url;
-    }
-
-    private static String getFilename(final String url) {
-        return url.substring(url.lastIndexOf('/') + 1);
     }
 }
